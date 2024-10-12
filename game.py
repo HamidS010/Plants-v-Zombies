@@ -1,7 +1,7 @@
 import arcade
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Ping Pong"
+SCREEN_TITLE = "Plants v Zombies"
 class Game(arcade.Window):
     def __init__(self,width,height,title):
         super().__init__(width,height,title)
