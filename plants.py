@@ -1,5 +1,7 @@
 import arcade
 import animate
+import time
+import objects
 
 SCALE = 0.12
 
@@ -20,7 +22,14 @@ class Plant(animate.Animate):
 
 
 class Sunflower(Plant):
-    def __init__(self):
+    def __init__(self,window):
         super().__init__("plants/sun1.png",80,50)
         self.append_texture(arcade.load_texture("plants/sun1.png"))
         self.append_texture(arcade.load_texture("plants/sun2.png"))
+        self.sun_spawn_time = time.time()
+        self.window = window
+    def update(self):
+        if time.time() - self.sun_spawn_time >= 15:
+            new_sun = objects.Sun(self.right,self.top)
+            self.sun_spawn_time = time.time()
+            self.window.suns_object.append(new_sun)
