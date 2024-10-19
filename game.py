@@ -4,6 +4,7 @@ SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Plants v Zombies"
 CELL_WIDTH = 78
+CELL_HEIGHT = 100
 def lawn_x(x):
     right_x = 248 + CELL_WIDTH
     column = 1
@@ -12,11 +13,20 @@ def lawn_x(x):
         column += 1
     center_x = right_x - CELL_WIDTH / 2
     return center_x, column
+def lawn_y(y):
+    top_y = 24 + CELL_HEIGHT
+    row = 1
+    while top_y <= y:
+        top_y += CELL_HEIGHT
+        row += 1
+    center_y = top_y - CELL_HEIGHT / 2
+    return center_y, row
 class Game(arcade.Window):
     def __init__(self,width,height,title):
         super().__init__(width,height,title)
         self.bg = arcade.load_texture("textures/background.jpg")
         self.menu = arcade.load_texture("textures/menu_vertical.png")
+        self.lawns = []
     def setup(self):
         self.plants = arcade.SpriteList()
         self.seed = None
@@ -28,7 +38,7 @@ class Game(arcade.Window):
         if self.seed != None:
             self.seed.draw()
     def update(self,delta_time):
-        pass
+        self.plants.update_animation()
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
         print(x,y)
         if 18 <= x <= 105:
@@ -50,10 +60,19 @@ class Game(arcade.Window):
             self.seed.center_x = x
             self.seed.center_y = y
     def on_mouse_release(self,x,y,button,modifiers):
-        if 244 <= x <= 566 and 27 <= y <= 425:
-            self.seed.planting(x,y,0,0)
-            self.seed.alpha = 255
-            self.plants.append(self.seed)
+        if 244 <= x <= 566 and 27 <= y <= 524:
+            center_x, column = lawn_x(x)
+            center_y, row = lawn_y(y)
+            if (row,column) not in self.lawns:
+                self.seed.planting(center_x,center_y,row,column)
+                self.seed.alpha = 255
+                self.plants.append(self.seed)
+                self.seed = None
+                self.lawns.append((row,column))
+            if (row,column) in self.lawns:
+                self.seed = None
+                return
+        else:
             self.seed = None
 window = Game(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE)
 window.setup()
