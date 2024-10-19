@@ -28,6 +28,7 @@ class Game(arcade.Window):
         self.menu = arcade.load_texture("textures/menu_vertical.png")
         self.lawns = []
         self.plant_sound = arcade.load_sound("sounds/seed.mp3")
+        self.suns = 300
     def setup(self):
         self.plants = arcade.SpriteList()
         self.seed = None
@@ -38,6 +39,7 @@ class Game(arcade.Window):
         self.plants.draw()
         if self.seed != None:
             self.seed.draw()
+        arcade.draw_text(f"{self.suns}",34,490,(165,42,42),30)
     def update(self,delta_time):
         self.plants.update_animation()
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
@@ -64,8 +66,9 @@ class Game(arcade.Window):
         if 244 <= x <= 566 and 27 <= y <= 524:
             center_x, column = lawn_x(x)
             center_y, row = lawn_y(y)
-            if (row,column) not in self.lawns:
+            if (row,column) not in self.lawns and self.seed.price <= self.suns:
                 self.seed.planting(center_x,center_y,row,column)
+                self.suns -= self.seed.price
                 self.seed.alpha = 255
                 self.plants.append(self.seed)
                 self.seed = None
