@@ -27,6 +27,7 @@ class Game(arcade.Window):
         self.bg = arcade.load_texture("textures/background.jpg")
         self.menu = arcade.load_texture("textures/menu_vertical.png")
         self.lawns = []
+        self.plant_sound = arcade.load_sound("sounds/seed.mp3")
     def setup(self):
         self.plants = arcade.SpriteList()
         self.seed = None
@@ -69,6 +70,7 @@ class Game(arcade.Window):
                 self.plants.append(self.seed)
                 self.seed = None
                 self.lawns.append((row,column))
+                arcade.play_sound(self.plant_sound,0.5)
             if (row,column) in self.lawns:
                 self.seed = None
                 return
