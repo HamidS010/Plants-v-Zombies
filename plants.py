@@ -33,3 +33,21 @@ class Sunflower(Plant):
             new_sun = objects.Sun(self.right,self.top)
             self.sun_spawn_time = time.time()
             self.window.suns_object.append(new_sun)
+            
+
+
+class Peashooter(Plant):
+    def __init__(self, window):
+        super().__init__("plants/pea1.png", 80, 100)
+        self.append_texture(arcade.load_texture("plants/pea1.png"))
+        self.append_texture(arcade.load_texture("plants/pea2.png"))
+        self.append_texture(arcade.load_texture("plants/pea3.png"))
+        self.window = window
+        self.last_shot_time = time.time()
+    def update(self):
+        if self.health > 0:
+            current_time = time.time()
+            if current_time - self.last_shot_time >= 3:
+                new_bul = objects.Bul(self.right, self.top)
+                self.window.buls_object.append(new_bul)  
+                self.last_shot_time = current_time  

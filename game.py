@@ -33,6 +33,7 @@ class Game(arcade.Window):
         self.plants = arcade.SpriteList()
         self.seed = None
         self.suns_object = arcade.SpriteList()
+        self.buls_object = arcade.SpriteList()
     def on_draw(self):
         self.clear((255,255,255))
         arcade.draw_texture_rectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT, self.bg)
@@ -41,10 +42,13 @@ class Game(arcade.Window):
         if self.seed != None:
             self.seed.draw()
         self.suns_object.draw()
+        self.buls_object.draw()
         arcade.draw_text(f"{self.suns_money}",34,490,(165,42,42),30)
     def update(self,delta_time):
         self.plants.update_animation()
         self.plants.update()
+        self.suns_object.update()
+        self.buls_object.update()
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
         print(x,y)
         if 18 <= x <= 105:
@@ -53,6 +57,7 @@ class Game(arcade.Window):
                 self.seed = plants.Sunflower(self)
             if 270 <= y <= 362:
                 print("Pea shooter")
+                self.seed = plants.Peashooter(self)
             if 154 <= y <= 248:
                 print("walnut")
             if 34 <= y <= 131:
