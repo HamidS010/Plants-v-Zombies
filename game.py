@@ -1,5 +1,9 @@
 import arcade
 import plants
+import time
+import zombies
+import random
+
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Plants v Zombies"
@@ -34,6 +38,8 @@ class Game(arcade.Window):
         self.seed = None
         self.suns_object = arcade.SpriteList()
         self.buls_object = arcade.SpriteList()
+        self.zombies = arcade.SpriteList()
+        self.zombie_spawn_time = time.time()
     def on_draw(self):
         self.clear((255,255,255))
         arcade.draw_texture_rectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT, self.bg)
@@ -43,12 +49,19 @@ class Game(arcade.Window):
             self.seed.draw()
         self.suns_object.draw()
         self.buls_object.draw()
+        self.zombies.draw()
         arcade.draw_text(f"{self.suns_money}",34,490,(165,42,42),30)
     def update(self,delta_time):
         self.plants.update_animation()
         self.plants.update()
         self.suns_object.update()
         self.buls_object.update()
+        self.zombies.update()
+        self.zombies.update_animation(delta_time)
+        if time.time() - self.zombie_spawn_time > 5:
+            center_y, row = lawn_y(random.randint(24,524))
+            self.zombies.append(zombies.OrdinaryZombie(center_y,row))
+            self.zombie_spawn_time = time.time()
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
         print(x,y)
         if 18 <= x <= 105:
